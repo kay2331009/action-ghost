@@ -143,19 +143,19 @@
           <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#8B0000" flood-opacity="0.4"/>
         </filter>
       </defs>
-      <!-- 苹果光晕 -->
-      <circle cx="50" cy="55" r="52" fill="url(#appleAura)"/>
-      <!-- 苹果主体：扁椭圆，虚边+内部半透明虚填充 -->
-      <ellipse cx="50" cy="55" rx="38" ry="30" fill="rgba(200,83,74,0.12)" stroke="rgba(200,83,74,0.35)" stroke-width="1" filter="url(#appleShadow)"/>
-      <!-- 内部腮红 -->
-      <ellipse cx="34" cy="54" rx="8" ry="6" fill="rgba(200,83,74,0.08)" transform="rotate(-15,34,54)"/>
-      <ellipse cx="66" cy="54" rx="8" ry="6" fill="rgba(200,83,74,0.08)" transform="rotate(15,66,54)"/>
-      <!-- 虚茎 -->
-      <path d="M50,26 Q52,18 56,16" stroke="rgba(80,160,80,0.25)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <!-- 笑脸（虚） -->
-      <circle cx="40" cy="52" r="2" fill="rgba(200,83,74,0.3)"/>
-      <circle cx="60" cy="52" r="2" fill="rgba(200,83,74,0.3)"/>
-      <path d="M40,58 Q50,62 60,58" stroke="rgba(200,83,74,0.25)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <!-- 外层虚光晕 -->
+      <ellipse cx="50" cy="55" rx="44" ry="36" fill="rgba(200,83,74,0.06)" filter="url(#appleShadow)"/>
+      <!-- 苹果主体：扁椭圆，外层虚+内层清晰边界 -->
+      <ellipse cx="50" cy="55" rx="38" ry="30" fill="rgba(200,83,74,0.08)" stroke="rgba(200,83,74,0.4)" stroke-width="1.5"/>
+      <!-- 内部腮红（清晰） -->
+      <ellipse cx="34" cy="54" rx="7" ry="5" fill="rgba(180,60,60,0.15)" transform="rotate(-15,34,54)"/>
+      <ellipse cx="66" cy="54" rx="7" ry="5" fill="rgba(180,60,60,0.15)" transform="rotate(15,66,54)"/>
+      <!-- 茎 -->
+      <path d="M50,26 Q52,18 56,16" stroke="rgba(80,160,80,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- 笑脸 -->
+      <circle cx="40" cy="52" r="2" fill="rgba(200,83,74,0.4)"/>
+      <circle cx="60" cy="52" r="2" fill="rgba(200,83,74,0.4)"/>
+      <path d="M40,58 Q50,62 60,58" stroke="rgba(200,83,74,0.35)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
     </svg>
   </div>
 </div>
