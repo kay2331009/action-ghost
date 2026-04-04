@@ -30,9 +30,9 @@
   @keyframes normal-shake{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}25%{transform:translate(-0.5px,0.3px);filter:blur(0.3px);opacity:0.6}50%{transform:translate(0.4px,-0.3px);filter:blur(0.4px);opacity:0.65}75%{transform:translate(-0.4px,-0.5px);filter:blur(0.3px);opacity:0.55}}
   .normal{animation:normal-shake 4s ease-in-out infinite}
 
-  /* 前瑶点点打字效果 */
-  @keyframes typing{0%,100%{opacity:0.6}50%{opacity:0.9}}
-  .type-dots{animation:typing 1.5s ease-in-out infinite}
+  /* 前瑶点点打字效果 - 接上抖动模糊 */
+  @keyframes typing-shake{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.7}25%{transform:translate(-0.5px,0.3px);filter:blur(0.2px);opacity:0.5}50%{transform:translate(0.4px,-0.3px);filter:blur(0.4px);opacity:0.6}75%{transform:translate(-0.4px,-0.5px);filter:blur(0.3px);opacity:0.45}}
+  .type-dots{animation:typing-shake 2s ease-in-out infinite}
 
   /* 我我我重影效果 - 三层都模糊，发疯感 */
   @keyframes ghost-duplicate{
