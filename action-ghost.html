@@ -145,20 +145,19 @@
       </defs>
       <!-- 苹果光晕 -->
       <circle cx="50" cy="55" r="52" fill="url(#appleAura)"/>
-      <!-- 苹果主体：扁扁的 -->
-      <path d="M50,16 Q64,12 72,22 Q84,34 84,52 Q84,76 50,90 Q16,76 16,52 Q16,34 28,22 Q36,12 50,16Z" fill="rgba(200,83,74,0.2)" stroke="rgba(200,83,74,0.6)" stroke-width="1.5" filter="url(#appleShadow)"/>
+      <!-- 苹果主体：扁椭圆 -->
+      <ellipse cx="50" cy="55" rx="38" ry="30" fill="rgba(200,83,74,0.2)" stroke="rgba(200,83,74,0.6)" stroke-width="1.5" filter="url(#appleShadow)"/>
       <!-- 左高光 -->
-      <path d="M28,38 Q24,50 26,62" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <!-- 右暗部 -->
-      <path d="M74,38 Q78,52 75,64" stroke="rgba(0,0,0,0.12)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="36" cy="48" rx="8" ry="6" fill="rgba(255,255,255,0.1)" transform="rotate(-15,36,48)"/>
+      <!-- 腮红 -->
+      <ellipse cx="30" cy="60" rx="7" ry="4" fill="rgba(180,60,60,0.25)"/>
+      <ellipse cx="70" cy="60" rx="7" ry="4" fill="rgba(180,60,60,0.25)"/>
       <!-- 茎 -->
-      <path d="M50,16 Q52,8 56,6 Q60,4 62,6" stroke="rgba(80,160,80,0.65)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      <!-- 叶子 -->
-      <path d="M56,11 Q66,4 70,10 Q67,16 60,15 Q56,14 56,11Z" fill="rgba(80,160,80,0.55)" stroke="rgba(80,160,80,0.4)" stroke-width="0.5"/>
+      <path d="M50,26 Q52,18 56,16" stroke="rgba(80,160,80,0.65)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
       <!-- 笑脸 -->
       <circle cx="40" cy="52" r="2.5" fill="rgba(200,83,74,0.6)"/>
       <circle cx="60" cy="52" r="2.5" fill="rgba(200,83,74,0.6)"/>
-      <path d="M40,62 Q50,68 60,62" stroke="rgba(200,83,74,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M40,60 Q50,66 60,60" stroke="rgba(200,83,74,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
     </svg>
   </div>
 </div>
