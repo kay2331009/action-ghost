@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>乱码动画测试 v3</title>
+<title>乱码动画测试 v4</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{
@@ -16,97 +16,173 @@
   h2{margin-bottom:40px;font-size:1.2rem;color:#c8534a;letter-spacing:4px}
 
   .test-row{display:flex;flex-direction:column;align-items:center;margin-bottom:50px}
-  .test-label{margin-bottom:12px;font-size:0.7rem;color:rgba(200,83,74,0.5);letter-spacing:2px}
+  .test-label{margin-bottom:12px;font-size:0.7rem;color:rgba(200,83,74,0.5);letter:2px}
 
   .card{
-    width:280px;min-height:100px;
+    width:280px;min-height:80px;
     background:rgba(200,83,74,0.06);border:1px solid rgba(200,83,74,0.22);
     border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:28px 24px;
+    padding:24px;
   }
   .card-text{font-size:1.1rem;line-height:2;color:rgba(240,230,211,0.9);text-align:center}
 
-  /* 每个字符独立闪烁 */
-  .char{
-    display:inline-block;
-    transition:opacity 0.1s;
-  }
+  @keyframes slow-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}25%{transform:translate(-0.5px,0.3px);filter:blur(0.2px);opacity:0.55}50%{transform:translate(0.3px,-0.3px);filter:blur(0.5px);opacity:0.65}75%{transform:translate(-0.3px,-0.5px);filter:blur(0.3px);opacity:0.5}}
+  .slow-shake{animation:slow-breathe 4s ease-in-out infinite}
 
-  /* 组合：慢抖动模糊 */
-  @keyframes shake-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.85}25%{transform:translate(-0.5px,0.3px);filter:blur(0.2px);opacity:0.6}50%{transform:translate(0.3px,-0.3px);filter:blur(0.5px);opacity:0.7}75%{transform:translate(-0.3px,-0.5px);filter:blur(0.3px);opacity:0.55}}
-  .slow-shake{animation:shake-breathe 4s ease-in-out infinite}
+  .char{display:inline-block}
 </style>
 </head>
 <body>
 
-<h2>乱码动画测试 v3</h2>
+<h2>断断续续梦呓效果</h2>
 
-<!-- 慢速+字符错开闪烁 -->
+<!-- A：大部分点点，偶尔闪真实文字 -->
 <div class="test-row">
-  <div class="test-label">④ 慢速抖动模糊 + 字符错开闪烁（JS，每个字符独立）</div>
+  <div class="test-label">A · 点点···为主，偶尔闪"点我点我"</div>
   <div class="card">
-    <div class="card-text slow-shake" id="scrambleDemo">
-      <span class="char">点</span><span class="char">我</span><span class="char">点</span><span class="char">我</span>
-    </div>
+    <div class="card-text slow-shake" id="demoA"></div>
   </div>
 </div>
 
-<!-- 对比：更快频率 -->
+<!-- B：正常文字，碎成·点·我·，又拼回 -->
 <div class="test-row">
-  <div class="test-label">⑤ 快速字符闪烁（JS，更密集）</div>
+  <div class="test-label">B · 正常→碎裂→重组，循环</div>
   <div class="card">
-    <div class="card-text" id="scrambleDemo2">
-      <span class="char">点</span><span class="char">我</span><span class="char">点</span><span class="char">我</span>
-    </div>
+    <div class="card-text slow-shake" id="demoB"></div>
   </div>
 </div>
 
-<!-- 对比：只有模糊抖动，无JS -->
+<!-- C：信号格模式 ··×·· -->
 <div class="test-row">
-  <div class="test-label">⑥ 只有慢抖动模糊（CSS，无JS）</div>
+  <div class="test-label">C · 信号格，×位置显示真实内容</div>
   <div class="card">
-    <div class="card-text slow-shake">✨点👻我💀点🌙我✨</div>
+    <div class="card-text slow-shake" id="demoC"></div>
+  </div>
+</div>
+
+<!-- D：慢慢消散又重组 -->
+<div class="test-row">
+  <div class="test-label">D · 正常→消散→消失→重组，循环</div>
+  <div class="card">
+    <div class="card-text slow-shake" id="demoD"></div>
+  </div>
+</div>
+
+<!-- E：混合，主体点点，幽灵符号穿插 -->
+<div class="test-row">
+  <div class="test-label">E · 点点为主，幽灵符号穿插，偶尔闪文字</div>
+  <div class="card">
+    <div class="card-text slow-shake" id="demoE"></div>
   </div>
 </div>
 
 <script>
-  var scrambleChars = ['点','我','•','◦','◇','○','□','△','☆','★','👻','💀','🌙','✨','🍎','↑','↓','←','→','～'];
-  var elements = document.querySelectorAll('#scrambleDemo .char');
-  var elements2 = document.querySelectorAll('#scrambleDemo2 .char');
+  var dots = '····················';
+  var original = '点我点我';
+  var ghost = ['👻','💀','🌙','✨','🍎'];
 
-  function randomChar() {
-    return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-  }
-
-  // ④：每个字符独立，错开时间闪烁
-  elements.forEach(function(el, i) {
-    el.dataset.original = el.textContent;
-    setInterval(function() {
-      if (Math.random() < 0.35) {
-        el.textContent = randomChar();
-        el.style.opacity = '0.4';
-        setTimeout(function() {
-          el.textContent = el.dataset.original;
-          el.style.opacity = '1';
-        }, 120 + Math.random() * 150);
+  // A：大部分点点，偶尔闪一下真实文字
+  (function(){
+    var el = document.getElementById('demoA');
+    var showingDots = true;
+    function update() {
+      if (showingDots) {
+        // 随机显示1-3个点
+        el.textContent = dots.substring(0, 4 + Math.floor(Math.random() * 4));
+        setTimeout(update, 600 + Math.random() * 800);
+      } else {
+        el.textContent = original;
+        setTimeout(update, 150 + Math.random() * 200);
       }
-    }, 200 + i * 180);
-  });
+      showingDots = !showingDots;
+    }
+    update();
+  })();
 
-  // ⑤：更快更密集
-  elements2.forEach(function(el, i) {
-    el.dataset.original = el.textContent;
-    setInterval(function() {
-      if (Math.random() < 0.5) {
-        el.textContent = randomChar();
-        el.style.opacity = '0.3';
-        setTimeout(function() {
-          el.textContent = el.dataset.original;
-          el.style.opacity = '1';
-        }, 60 + Math.random() * 100);
+  // B：正常→碎裂→重组，循环
+  (function(){
+    var el = document.getElementById('demoB');
+    var phase = 0; // 0=normal, 1=breaking, 2=broken, 3=reforming
+    var phaselengths = [2000, 800, 600, 800];
+    function update() {
+      var t = phase % 4;
+      if (t === 0) {
+        el.textContent = original;
+      } else if (t === 1) {
+        // 碎裂：·点·我·
+        el.textContent = '·' + original[0] + '·' + original[1] + '·' + original[2] + '·' + original[3] + '·';
+      } else if (t === 2) {
+        el.textContent = '········';
+      } else {
+        // 重组
+        el.textContent = '·点·我·';
       }
-    }, 100 + i * 80);
-  });
+      phase++;
+      setTimeout(update, phaselengths[phase % 4]);
+    }
+    update();
+  })();
+
+  // C：信号格 ··×··
+  (function(){
+    var el = document.getElementById('demoC');
+    function update() {
+      var result = '';
+      for (var i = 0; i < 5; i++) {
+        if (Math.random() < 0.3) {
+          result += original[Math.floor(Math.random() * 4)];
+        } else {
+          result += '·';
+        }
+      }
+      el.textContent = result;
+      setTimeout(update, 120 + Math.random() * 150);
+    }
+    update();
+  })();
+
+  // D：正常→消散→消失→重组，循环
+  (function(){
+    var el = document.getElementById('demoD');
+    var step = 0;
+    var steps = [
+      { text: '点我点我', dur: 2000 },
+      { text: '点··  我', dur: 600 },
+      { text: '·  · ·', dur: 600 },
+      { text: '········', dur: 800 },
+      { text: '·  · ·', dur: 600 },
+      { text: '点··  我', dur: 600 }
+    ];
+    function update() {
+      var s = steps[step % steps.length];
+      el.textContent = s.text;
+      setTimeout(update, s.dur);
+      step++;
+    }
+    update();
+  })();
+
+  // E：混合，主体点点，幽灵符号穿插
+  (function(){
+    var el = document.getElementById('demoE');
+    function update() {
+      var result = '';
+      var r = Math.random();
+      if (r < 0.6) {
+        // 大部分点点
+        result = '·'.repeat(3 + Math.floor(Math.random() * 5));
+      } else if (r < 0.8) {
+        // 幽灵符号
+        result = ghost[Math.floor(Math.random() * ghost.length)];
+      } else {
+        // 闪文字
+        result = original;
+      }
+      el.textContent = result;
+      setTimeout(update, 400 + Math.random() * 600);
+    }
+    update();
+  })();
 </script>
 
 </body>
