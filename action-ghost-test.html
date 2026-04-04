@@ -54,7 +54,7 @@
 
 <!-- C：信号格模式 ··×·· -->
 <div class="test-row">
-  <div class="test-label">C · 信号格，×位置显示真实内容</div>
+  <div class="test-label">C · B+C结合：正常"点我点我"，偶尔闪烁信号格</div>
   <div class="card">
     <div class="card-text slow-shake" id="demoC"></div>
   </div>
@@ -123,20 +123,27 @@
     update();
   })();
 
-  // C：信号格 ··×··
+  // C：信号格 ··×··（大部分正常，偶尔闪烁信号格）
   (function(){
     var el = document.getElementById('demoC');
+    var showingNormal = true;
     function update() {
-      var result = '';
-      for (var i = 0; i < 5; i++) {
-        if (Math.random() < 0.3) {
-          result += original[Math.floor(Math.random() * 4)];
-        } else {
-          result += '·';
+      if (showingNormal) {
+        el.textContent = original;
+      } else {
+        // 信号格闪烁
+        var result = '';
+        for (var i = 0; i < 5; i++) {
+          if (Math.random() < 0.35) {
+            result += original[Math.floor(Math.random() * 4)];
+          } else {
+            result += '·';
+          }
         }
+        el.textContent = result;
       }
-      el.textContent = result;
-      setTimeout(update, 120 + Math.random() * 150);
+      showingNormal = !showingNormal;
+      setTimeout(update, showingNormal ? 1500 + Math.random() * 1000 : 100 + Math.random() * 100);
     }
     update();
   })();
