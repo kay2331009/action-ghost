@@ -66,9 +66,21 @@
   .card-watermark{position:absolute;bottom:10px;right:14px;font-size:11px;letter-spacing:3px;color:rgba(200,83,74,0.22);font-family:serif;pointer-events:none;animation:heartbeat 2s ease-in-out infinite}
   @keyframes heartbeat{0%,100%{opacity:0.18}50%{opacity:0.45}}
 
-  /* 乱码动画 */
+  /* 乱码动画1：抖动模糊 */
   @keyframes shake-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}20%{transform:translate(-1px,0.5px);filter:blur(0.3px);opacity:0.55}40%{transform:translate(0.5px,-0.5px);filter:blur(0.8px);opacity:0.75}60%{transform:translate(-0.5px,-1px);filter:blur(0.5px);opacity:0.65}80%{transform:translate(1px,0);filter:blur(0.2px);opacity:0.7}}
   .obfuscated-inline{animation:shake-breathe 3s ease-in-out infinite;display:inline-block}
+
+  /* 乱码动画2：快速闪烁字符 */
+  @keyframes glitch-flicker{0%,100%{opacity:0.9;filter:blur(0px)}25%{opacity:0.3;filter:blur(1px)}50%{opacity:0.7;filter:blur(0.5px)}75%{opacity:0.4;filter:blur(2px)}}
+  .glitch-flicker{animation:glitch-flicker 0.15s ease-in-out infinite}
+
+  /* 乱码动画3：左右抖动 */
+  @keyframes glitch-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-2px)}40%{transform:translateX(2px)}60%{transform:translateX(-1px)}80%{transform:translateX(1px)}}
+  .glitch-shake{animation:glitch-shake 0.2s ease-in-out infinite}
+
+  /* 乱码动画4：呼吸模糊 */
+  @keyframes breath-blur{0%,100%{filter:blur(0px);opacity:0.7}50%{filter:blur(3px);opacity:0.4}}
+  .breath-blur{animation:breath-blur 2s ease-in-out infinite}
 
   /* 提示文字 */
   .hint{position:relative;z-index:1;margin-top:18px;font-size:0.58rem;color:rgba(200,83,74,0.3);letter-spacing:3px;animation:pulse 3s ease-in-out infinite;white-space:nowrap}
@@ -337,7 +349,8 @@ function drawCard(data) {
   } else {
     cat.textContent = data.category; cat.style.color = ''; cat.style.letterSpacing = '';
     text.textContent = data.text; watermark.style.display = 'none';
-    backText.textContent = data.text;
+    // 背面显示乱码动画（测试版）
+    backText.innerHTML = '<span class="glitch-flicker">̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛</span>';
   }
 
   isDrawn = true;
