@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乱码动画测试</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:#030508;
+    min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    font-family:'PingFang SC','Microsoft YaHei',sans-serif;
+    color:#f0e6d3;padding:24px;
+  }
+  h2{margin-bottom:40px;font-size:1.2rem;color:#c8534a;letter-spacing:4px}
+
+  .test-row{display:flex;flex-direction:column;align-items:center;margin-bottom:40px}
+  .test-label{margin-bottom:12px;font-size:0.7rem;color:rgba(200,83,74,0.5);letter-spacing:2px}
+
+  .card{
+    width:280px;min-height:100px;
+    background:rgba(200,83,74,0.06);border:1px solid rgba(200,83,74,0.22);
+    border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:28px 24px;
+  }
+  .card-text{font-size:1.1rem;line-height:2;color:rgba(240,230,211,0.9)}
+
+  /* 乱码动画1：抖动模糊 */
+  @keyframes shake-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}20%{transform:translate(-1px,0.5px);filter:blur(0.3px);opacity:0.55}40%{transform:translate(0.5px,-0.5px);filter:blur(0.8px);opacity:0.75}60%{transform:translate(-0.5px,-1px);filter:blur(0.5px);opacity:0.65}80%{transform:translate(1px,0);filter:blur(0.2px);opacity:0.7}}
+  .anim1{animation:shake-breathe 3s ease-in-out infinite}
+
+  /* 乱码动画2：快速闪烁字符 */
+  @keyframes glitch-flicker{0%,100%{opacity:0.9;filter:blur(0px)}25%{opacity:0.3;filter:blur(1px)}50%{opacity:0.7;filter:blur(0.5px)}75%{opacity:0.4;filter:blur(2px)}}
+  .anim2{animation:glitch-flicker 0.15s ease-in-out infinite}
+
+  /* 乱码动画3：左右抖动 */
+  @keyframes glitch-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-2px)}40%{transform:translateX(2px)}60%{transform:translateX(-1px)}80%{transform:translateX(1px)}}
+  .anim3{animation:glitch-shake 0.2s ease-in-out infinite}
+
+  /* 乱码动画4：呼吸模糊 */
+  @keyframes breath-blur{0%,100%{filter:blur(0px);opacity:0.7}50%{filter:blur(3px);opacity:0.4}}
+  .anim4{animation:breath-blur 2s ease-in-out infinite}
+
+  /* 乱码动画5：快速闪烁+位移 */
+  @keyframes glitch-flash{0%{opacity:1;transform:translate(0,0)}20%{opacity:0.2;transform:translate(-2px,1px)}40%{opacity:0.8;transform:translate(1px,-1px)}60%{opacity:0.3;transform:translate(-1px,2px)}80%{opacity:0.6;transform:translate(2px,0)}100%{opacity:1;transform:translate(0,0)}}
+  .anim5{animation:glitch-flash 0.12s ease-in-out infinite}
+
+  /* 乱码动画6：渐变模糊+透明度呼吸 */
+  @keyframes blur-breathe{0%,100%{filter:blur(0px);opacity:0.9;transform:scale(1)}30%{filter:blur(2px);opacity:0.5;transform:scale(1.01)}70%{filter:blur(4px);opacity:0.3;transform:scale(0.99)}}
+  .anim6{animation:blur-breathe 1.8s ease-in-out infinite}
+</style>
+</head>
+<body>
+
+<h2>乱码动画测试</h2>
+
+<div class="test-row">
+  <div class="test-label">anim1 · 抖动模糊（3s循环）</div>
+  <div class="card"><div class="card-text"><span class="anim1">来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛</span></div></div>
+</div>
+
+<div class="test-row">
+  <div class="test-label">anim2 · 快速闪烁字符（0.15s循环）</div>
+  <div class="card"><div class="card-text"><span class="anim2">来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛</span></div></div>
+</div>
+
+<div class="test-row">
+  <div class="test-label">anim3 · 左右抖动（0.2s循环）</div>
+  <div class="card"><div class="card-text"><span class="anim3">来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛</span></div></div>
+</div>
+
+<div class="test-row">
+  <div class="test-label">anim4 · 呼吸模糊（2s循环）</div>
+  <div class="card"><div class="card-text"><span class="anim4">来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛</span></div></div>
+</div>
+
+<div class="test-row">
+  <div class="test-label">anim5 · 快速闪烁+位移（0.12s循环）</div>
+  <div class="card"><div class="card-text"><span class="anim5">来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛</span></div></div>
+</div>
+
+<div class="test-row">
+  <div class="test-label">anim6 · 渐变模糊+呼吸缩放（1.8s循环）</div>
+  <div class="card"><div class="card-text"><span class="anim6">来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛̛̛̛̛̛来找我̷̢̧̨̛̛̛̛̛̛</span></div></div>
+</div>
+
+</body>
+</html>
