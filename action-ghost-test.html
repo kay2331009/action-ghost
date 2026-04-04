@@ -29,6 +29,10 @@
   @keyframes slow-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}25%{transform:translate(-0.5px,0.3px);filter:blur(0.2px);opacity:0.55}50%{transform:translate(0.3px,-0.3px);filter:blur(0.5px);opacity:0.65}75%{transform:translate(-0.3px,-0.5px);filter:blur(0.3px);opacity:0.5}}
   .slow-shake{animation:slow-breathe 4s ease-in-out infinite}
 
+  /* C专用：抖动模糊+信号格，更慢更虚 */
+  @keyframes shake-c{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.85}30%{transform:translate(-0.8px,0.4px);filter:blur(0.4px);opacity:0.6}60%{transform:translate(0.5px,-0.5px);filter:blur(0.6px);opacity:0.7}}
+  .shake-c{animation:shake-c 5s ease-in-out infinite}
+
   .char{display:inline-block}
 </style>
 </head>
@@ -54,9 +58,9 @@
 
 <!-- C：信号格模式 ··×·· -->
 <div class="test-row">
-  <div class="test-label">C · B+C结合：正常"点我点我"，偶尔闪烁信号格</div>
+  <div class="test-label">C · B+C结合+抖动模糊：正常"点我点我"，偶尔信号格闪烁</div>
   <div class="card">
-    <div class="card-text slow-shake" id="demoC"></div>
+    <div class="card-text shake-c" id="demoC"></div>
   </div>
 </div>
 
