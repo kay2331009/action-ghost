@@ -59,6 +59,10 @@
   /* 持续字符打乱效果 */
   @keyframes scramble-blink{0%,100%{opacity:1}50%{opacity:0.6}}
   .scramble-char{animation:scramble-blink 0.08s ease-in-out infinite;display:inline-block}
+
+  /* 抖动模糊+持续打乱组合 */
+  @keyframes shake-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}20%{transform:translate(-1px,0.5px);filter:blur(0.3px);opacity:0.55}40%{transform:translate(0.5px,-0.5px);filter:blur(0.8px);opacity:0.75}60%{transform:translate(-0.5px,-1px);filter:blur(0.5px);opacity:0.65}80%{transform:translate(1px,0);filter:blur(0.2px);opacity:0.7}}
+  .anim-combo{animation:shake-breathe 2.5s ease-in-out infinite}
 </style>
 </head>
 <body>
@@ -97,9 +101,9 @@
 
 <!-- 选项4：持续字符打乱演示（JS） -->
 <div class="test-row">
-  <div class="test-label">④ 持续字符打乱（JS动态）</div>
+  <div class="test-label">④ 持续字符打乱 + 抖动模糊（JS动态）</div>
   <div class="card">
-    <div class="card-text" id="scrambleDemo">点我点我</div>
+    <div class="card-text anim-combo" id="scrambleDemo">点我点我</div>
   </div>
 </div>
 
@@ -132,9 +136,9 @@
 
   function scramble() {
     var result = '';
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 8; i++) {
       if (i < 4) {
-        if (Math.random() < 0.3) {
+        if (Math.random() < 0.4) {
           result += chars[Math.floor(Math.random() * chars.length)];
         } else {
           result += original4[i];
