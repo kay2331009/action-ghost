@@ -64,6 +64,15 @@
   .fade-in-normal{
     animation:fade-in-slow 1s ease-out forwards;
   }
+
+  /* 点我点我→点点点 过渡：模糊淡出 */
+  @keyframes blur-out{
+    0%{opacity:1;filter:blur(0px)}
+    100%{opacity:0;filter:blur(6px)}
+  }
+  .blur-out{
+    animation:blur-out 0.6s ease-in-out forwards;
+  }
 </style>
 </head>
 <body>
@@ -104,7 +113,7 @@ var phase = 0; // 0=正常, 1=点点点, 2=我我我, 3=过渡
 var mainEl = document.getElementById('demoMain');
 
 // 阶段时长（毫秒）
-var phaseDuration = [3500, 2000, 1200, 1000]; // 正常3.5s, 点点2s, 我我1.2s, 过渡1s
+var phaseDuration = [3500, 600, 2000, 1200, 1000]; // 正常3.5s, 过渡0.6s, 点点2s, 我我1.2s, 显形1s
 
 function runPhase() {
   var dur = phaseDuration[phase];
@@ -115,8 +124,13 @@ function runPhase() {
     mainEl.textContent = '点我点我';
 
   } else if (phase === 1) {
-    // 阶段2：点点点点字出现
-    mainEl.className = 'card-text';
+    // 阶段2：过渡 - 模糊淡出"点我点我"
+    mainEl.className = 'card-text blur-out';
+    mainEl.textContent = '点我点我';
+
+  } else if (phase === 2) {
+    // 阶段3：点点点点字出现
+    mainEl.className = 'card-text type-dots';
     mainEl.style.filter = 'none';
     mainEl.style.opacity = '1';
     mainEl.textContent = '';
@@ -129,18 +143,18 @@ function runPhase() {
       if (i > dots.length) clearInterval(typeInterval);
     }, 250);
 
-  } else if (phase === 2) {
-    // 阶段3：我我我重影模糊
+  } else if (phase === 3) {
+    // 阶段4：我我我重影模糊
     mainEl.className = 'card-text';
     mainEl.innerHTML = '<span class="ghost-text" data-text="我我我">我我我</span>';
 
-  } else if (phase === 3) {
-    // 阶段4：过渡 - 慢慢显形"点我点我"
+  } else if (phase === 4) {
+    // 阶段5：过渡 - 慢慢显形"点我点我"
     mainEl.className = 'card-text fade-in-normal';
     mainEl.innerHTML = '<span class="ghost-text" data-text="点我点我">点我点我</span>';
   }
 
-  phase = (phase + 1) % 4;
+  phase = (phase + 1) % 5;
   setTimeout(runPhase, dur);
 }
 
