@@ -223,7 +223,7 @@
 
 <div class="heart-test" id="heartTest" title="测试特殊卡">♡</div>
 
-<button class="all-btn" id="allBtn" onclick="showAll()">总览全部 95 条</button>
+<button class="all-btn" id="allBtn" onclick="showAll()">总览全部 96 条</button>
 
 <div class="all-overlay" id="allOverlay">
   <button class="all-close" onclick="closeAll()">关闭</button>
@@ -511,6 +511,8 @@ function showAll(cat) {
     filtered = [{ category: '♡', text: '来找我', isHidden: true }];
   } else if (cat === '全部') {
     filtered = actions.filter(a => a.category !== '♡');
+    // 在全部里也插入一条隐藏卡
+    filtered.push({ category: '♡', text: '来找我', isHidden: true });
   } else {
     filtered = actions.filter(a => a.category === cat && a.category !== '♡');
   }
