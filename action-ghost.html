@@ -488,22 +488,22 @@ function showAll(cat) {
   const grid = document.getElementById('allGrid');
   const tabs = document.getElementById('allTabs');
   grid.innerHTML = '';
-  const cats = ['全部', '♡'];
-  actions.forEach(a => { if (!cats.includes(a.category)) cats.push(a.category); });
+  var cats = ['全部'];
+  actions.forEach(a => { if (a.category !== '♡' && !cats.includes(a.category)) cats.push(a.category); });
   tabs.innerHTML = '';
-  cats.forEach(c => { var btn = document.createElement('button'); btn.className = 'all-tab' + (c === '♡' ? ' heart' : '') + (c === cat ? ' active' : ''); btn.textContent = c; btn.onclick = function() { showAll(c); }; tabs.appendChild(btn); });
-  const filtered = cat === '全部' ? actions : actions.filter(a => a.category === cat);
+  cats.forEach(c => { var btn = document.createElement('button'); btn.className = 'all-tab' + (c === cat ? ' active' : ''); btn.textContent = c; btn.onclick = function() { showAll(c); }; tabs.appendChild(btn); });
+  // ♡ 卡片总览里完全隐藏，不剧透
+  var visibleActions = actions.filter(a => a.category !== '♡');
+  const filtered = cat === '全部' ? visibleActions : visibleActions.filter(a => a.category === cat);
   filtered.forEach(a => {
     var div = document.createElement('div');
     div.className = 'all-item';
     var catDiv = document.createElement('div');
-    catDiv.className = 'all-item-cat' + (a.category === '♡' ? ' heart' : '');
+    catDiv.className = 'all-item-cat';
     catDiv.textContent = a.category;
     div.appendChild(catDiv);
     var textSpan = document.createElement('span');
-    if (a.category === '♡') {
-      textSpan.innerHTML = '<span class="obfuscated-inline">来找我̷̢̧̨̛̛̛</span>';
-    } else { textSpan.textContent = a.text; }
+    textSpan.textContent = a.text;
     div.appendChild(textSpan);
     grid.appendChild(div);
   });
