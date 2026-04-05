@@ -377,10 +377,9 @@ function runCardAnim() {
       content.textContent = '';
 
     } else {
-      // 动画结束，显示真实文字
-      overlay.style.display = 'none';
-      backText.style.visibility = 'visible';
-      isAnimating = false;
+      // 动画结束，循环回阶段0重新播放
+      phase = 0;
+      setTimeout(runPhase, 500);
       return;
     }
 
