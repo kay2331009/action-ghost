@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>隐藏结局动画测试</title>
+<style>
+  body{background:#030508;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'PingFang SC','Microsoft YaHei',sans-serif;color:#f0e6d3;padding:24px;gap:32px}
+  h2{color:#c8534a;letter-spacing:4px;font-size:1rem}
+  .label{font-size:0.7rem;color:rgba(200,83,74,0.5);letter-spacing:2px;margin-bottom:12px}
+
+  /* 逐个闪烁 */
+  @keyframes blink1{0%,100%{opacity:0.08}50%{opacity:0.8}}
+  @keyframes blink2{0%,100%{opacity:0.08}50%{opacity:0.5}75%{opacity:0.8}}
+  @keyframes blink3{0%,100%{opacity:0.08}25%{opacity:0.7}50%{opacity:0.3}}
+  .opt1 .p1{animation:blink1 1.2s ease-in-out infinite}
+  .opt1 .p2{animation:blink2 1.2s ease-in-out infinite 0.15s}
+  .opt1 .p3{animation:blink3 1.2s ease-in-out infinite 0.3s}
+
+  /* 抖动位移 */
+  @keyframes jitter{
+    0%,100%{transform:translate(0,0)}
+    20%{transform:translate(-1px,0.5px)}
+    40%{transform:translate(0.8px,-0.3px)}
+    60%{transform:translate(-0.5px,-1px)}
+    80%{transform:translate(1px,0.3px)}
+  }
+  .opt2 span{animation:jitter 0.8s ease-in-out infinite;display:inline-block}
+
+  /* 呼吸感 */
+  @keyframes breathe{0%,100%{opacity:0.08;transform:scale(1)}50%{opacity:0.6;transform:scale(1.15)}}
+  .opt3 span{animation:breathe 2s ease-in-out infinite;display:inline-block}
+
+  /* 逐个解锁出现 */
+  @keyframes unlock1{0%{opacity:0.08;transform:scale(0.7)}50%{opacity:0.7;transform:scale(1.1)}100%{opacity:0.08;transform:scale(0.7)}}
+  @keyframes unlock2{0%{opacity:0.08;transform:scale(0.7)}50%{opacity:0.5;transform:scale(1.05)}100%{opacity:0.08;transform:scale(0.7)}}
+  @keyframes unlock3{0%{opacity:0.08;transform:scale(0.7)}50%{opacity:0.3;transform:scale(1)}100%{opacity:0.08;transform:scale(0.7)}}
+  .opt4 .p1{animation:unlock1 2s ease-in-out infinite}
+  .opt4 .p2{animation:unlock2 2s ease-in-out infinite 0.3s}
+  .opt4 .p3{animation:unlock3 2s ease-in-out infinite 0.6s}
+
+  .row{display:flex;gap:16px;align-items:center;font-size:1.4rem;letter-spacing:10px}
+</style>
+</head>
+<body>
+
+<h2>隐藏结局动画测试</h2>
+
+<div>
+  <div class="label">① 逐个闪烁</div>
+  <div class="row opt1">
+    <span class="p1">◼️</span><span class="p2">◼️</span><span class="p3">◼️</span>
+  </div>
+</div>
+
+<div>
+  <div class="label">② 抖动位移</div>
+  <div class="row opt2">
+    <span>◼️</span><span>◼️</span><span>◼️</span>
+  </div>
+</div>
+
+<div>
+  <div class="label">③ 呼吸缩放</div>
+  <div class="row opt3">
+    <span>◼️</span><span>◼️</span><span>◼️</span>
+  </div>
+</div>
+
+<div>
+  <div class="label">④ 逐个解锁出现</div>
+  <div class="row opt4">
+    <span class="p1">◼️</span><span class="p2">◼️</span><span class="p3">◼️</span>
+  </div>
+</div>
+
+</body>
+</html>
