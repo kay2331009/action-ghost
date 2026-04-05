@@ -526,11 +526,12 @@ function showAll(cat) {
       var placeholder = document.createElement('span');
       placeholder.className = 'hidden-placeholder';
       placeholder.textContent = '◼️◼️◼️';
-      textSpan.parentNode.insertBefore(placeholder, textSpan.nextSibling);
+      div.appendChild(textSpan);
+      div.appendChild(placeholder);
     } else {
       textSpan.textContent = a.text;
+      div.appendChild(textSpan);
     }
-    div.appendChild(textSpan);
     grid.appendChild(div);
   });
   document.getElementById('allOverlay').classList.add('show');
