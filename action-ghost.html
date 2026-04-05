@@ -336,10 +336,11 @@ function runCardAnim() {
   // 隐藏真实文字，显示动画层
   backText.style.visibility = 'hidden';
   overlay.style.display = 'flex';
+  var realText = backText.textContent || '来找我';
 
   var phase = 0;
-  // [点我点我5s, 模糊淡出0.4s, 点点点2s, 我我我1.2s, 显形1s]
-  var phaseDuration = [5000, 400, 2000, 1200, 1000];
+  // [点我点我5s, 模糊淡出0.4s, 点点点2s, 我我我1.2s, 显形1s, 循环过渡0.6s]
+  var phaseDuration = [5000, 400, 2000, 1200, 1000, 600];
 
   function runPhase() {
     var dur = phaseDuration[phase];
@@ -374,12 +375,17 @@ function runCardAnim() {
     } else if (phase === 4) {
       // 慢慢显形真实文字
       content.className = 'fade-in-normal';
-      content.textContent = '';
+      content.textContent = realText; // 显形真实文字
+
+    } else if (phase === 5) {
+      // 阶段5：模糊过渡，准备进入下一轮
+      content.className = 'blur-out';
+      content.textContent = realText; // 过渡真实文字
 
     } else {
-      // 动画结束，循环回阶段0重新播放
+      // 动画结束，循环回阶段0
       phase = 0;
-      setTimeout(runPhase, 500);
+      setTimeout(runPhase, 400);
       return;
     }
 
