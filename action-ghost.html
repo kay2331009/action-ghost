@@ -119,6 +119,13 @@
   .all-item{padding:12px 14px;background:rgba(200,83,74,0.04);border:1px solid rgba(200,83,74,0.12);border-radius:10px;font-size:0.78rem;line-height:1.8;color:rgba(240,230,211,0.8);letter-spacing:0.3px}
   .all-item-cat{font-size:0.55rem;letter-spacing:2px;color:rgba(200,83,74,0.45);margin-bottom:4px}
   .all-item-cat.heart{color:#e07a5f;letter-spacing:4px}
+  .all-item.hidden-card{position:relative}
+  .all-item.hidden-card .all-item-cat{opacity:0.3}
+  .all-item.hidden-card .hidden-text{
+    filter:blur(12px);opacity:0.15;user-select:none;
+    pointer-events:none;display:block;overflow:hidden;
+    max-height:60px;
+  }
 </style>
 </head>
 <body>
@@ -488,22 +495,33 @@ function showAll(cat) {
   const grid = document.getElementById('allGrid');
   const tabs = document.getElementById('allTabs');
   grid.innerHTML = '';
-  var cats = ['全部'];
+  var cats = ['全部', '♡'];
   actions.forEach(a => { if (a.category !== '♡' && !cats.includes(a.category)) cats.push(a.category); });
   tabs.innerHTML = '';
-  cats.forEach(c => { var btn = document.createElement('button'); btn.className = 'all-tab' + (c === cat ? ' active' : ''); btn.textContent = c; btn.onclick = function() { showAll(c); }; tabs.appendChild(btn); });
-  // ♡ 卡片总览里完全隐藏，不剧透
-  var visibleActions = actions.filter(a => a.category !== '♡');
-  const filtered = cat === '全部' ? visibleActions : visibleActions.filter(a => a.category === cat);
+  cats.forEach(c => { var btn = document.createElement('button'); btn.className = 'all-tab' + (c === cat ? ' active' : ''); btn.textContent = c === '♡' ? '♡' : c; btn.onclick = function() { showAll(c); }; tabs.appendChild(btn); });
+  // ♡ tab shows one blurred hidden card row; otherwise hide ♡ cards
+  var filtered;
+  if (cat === '♡') {
+    filtered = [{ category: '♡', text: '来找我', isHidden: true }];
+  } else if (cat === '全部') {
+    filtered = actions.filter(a => a.category !== '♡');
+  } else {
+    filtered = actions.filter(a => a.category === cat && a.category !== '♡');
+  }
   filtered.forEach(a => {
     var div = document.createElement('div');
-    div.className = 'all-item';
+    div.className = 'all-item' + (a.isHidden ? ' hidden-card' : '');
     var catDiv = document.createElement('div');
-    catDiv.className = 'all-item-cat';
-    catDiv.textContent = a.category;
+    catDiv.className = 'all-item-cat' + (a.category === '♡' ? ' heart' : '');
+    catDiv.textContent = a.category === '♡' ? '♡ 隐藏结局' : a.category;
     div.appendChild(catDiv);
     var textSpan = document.createElement('span');
-    textSpan.textContent = a.text;
+    if (a.isHidden) {
+      textSpan.className = 'hidden-text';
+      textSpan.textContent = a.text;
+    } else {
+      textSpan.textContent = a.text;
+    }
     div.appendChild(textSpan);
     grid.appendChild(div);
   });
