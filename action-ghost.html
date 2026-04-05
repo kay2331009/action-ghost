@@ -342,6 +342,7 @@ function runCardAnim() {
   // [点我点我5s, 模糊淡出0.4s, 点点点2s, 我我我1.2s, 显形1s, 循环过渡0.6s]
   var phaseDuration = [5000, 400, 2000, 1200, 1000, 600];
 
+  var typeInterval;
   function runPhase() {
     var dur = phaseDuration[phase];
 
@@ -361,7 +362,8 @@ function runCardAnim() {
       content.textContent = '';
       var dots = ['点', '点点', '点点点', '点点点·', '点点点··', '点点点···'];
       var i = 0;
-      var typeInterval = setInterval(function() {
+      clearInterval(typeInterval);
+      typeInterval = setInterval(function() {
         content.textContent = dots[i] || '点点点···';
         i++;
         if (i > dots.length) clearInterval(typeInterval);
@@ -369,16 +371,19 @@ function runCardAnim() {
 
     } else if (phase === 3) {
       // 我我我重影
+      clearInterval(typeInterval);
       content.className = '';
       content.innerHTML = '<span class="ghost-text" data-text="我我我">我我我</span>';
 
     } else if (phase === 4) {
       // 慢慢显形真实文字
+      clearInterval(typeInterval);
       content.className = 'fade-in-normal';
       content.textContent = realText; // 显形真实文字
 
     } else if (phase === 5) {
       // 阶段5：模糊过渡，准备进入下一轮
+      clearInterval(typeInterval);
       content.className = 'blur-out';
       content.textContent = realText; // 过渡真实文字
 
