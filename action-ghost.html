@@ -38,9 +38,9 @@
   @keyframes ghostGlow{0%,100%{opacity:0.5}50%{opacity:1}}
 
   /* 可爱圆润苹果 */
-  .apple-wrap{width:120px;height:120px;cursor:pointer;transition:transform 0.3s;animation:appleFloat 3s ease-in-out infinite}
+  .apple-wrap{width:90px;height:90px;cursor:pointer;transition:transform 0.3s;animation:appleFloat 3s ease-in-out infinite}
   .apple-wrap:hover{transform:scale(1.08)}
-  .apple-wrap svg{width:120px;height:120px;filter:drop-shadow(0 0 20px rgba(200,83,74,0.5))}
+  .apple-wrap svg{width:90px;height:90px;filter:drop-shadow(0 0 20px rgba(200,83,74,0.5))}
   @keyframes appleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
   .title{
@@ -165,22 +165,19 @@
           <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#8B0000" flood-opacity="0.4"/>
         </filter>
       </defs>
-      <!-- 苹果光晕 -->
-      <circle cx="50" cy="55" r="52" fill="url(#appleAura)"/>
-      <!-- 苹果主体：扁扁的 -->
-      <path d="M50,16 Q64,12 72,22 Q84,34 84,52 Q84,76 50,90 Q16,76 16,52 Q16,34 28,22 Q36,12 50,16Z" fill="rgba(200,83,74,0.2)" stroke="rgba(200,83,74,0.6)" stroke-width="1.5" filter="url(#appleShadow)"/>
-      <!-- 左高光 -->
-      <path d="M28,38 Q24,50 26,62" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <!-- 右暗部 -->
-      <path d="M74,38 Q78,52 75,64" stroke="rgba(0,0,0,0.12)" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <!-- 茎 -->
-      <path d="M50,16 Q52,8 56,6 Q60,4 62,6" stroke="rgba(80,160,80,0.65)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- 外层光晕 -->
+      <ellipse cx="50" cy="55" rx="44" ry="38" fill="rgba(200,83,74,0.04)" stroke="rgba(200,83,74,0.2)" stroke-width="1"/>
+      <!-- 苹果主体：椭圆，无边界线 -->
+      <ellipse cx="50" cy="55" rx="38" ry="33" fill="rgba(200,83,74,0.12)" stroke="none"/>
+      <!-- 内部腮红 -->
+      <ellipse cx="34" cy="54" rx="7" ry="5" fill="rgba(180,60,60,0.12)" transform="rotate(-15,34,54)"/>
+      <ellipse cx="66" cy="54" rx="7" ry="5" fill="rgba(180,60,60,0.12)" transform="rotate(15,66,54)"/>
       <!-- 叶子 -->
-      <path d="M56,11 Q66,4 70,10 Q67,16 60,15 Q56,14 56,11Z" fill="rgba(80,160,80,0.55)" stroke="rgba(80,160,80,0.4)" stroke-width="0.5"/>
+      <path d="M50,26 Q46,18 50,14 Q58,14 60,20 Q56,22 50,26Z" fill="rgba(80,160,80,0.45)" stroke="rgba(80,160,80,0.3)" stroke-width="0.5"/>
       <!-- 笑脸 -->
-      <circle cx="40" cy="52" r="2.5" fill="rgba(200,83,74,0.6)"/>
-      <circle cx="60" cy="52" r="2.5" fill="rgba(200,83,74,0.6)"/>
-      <path d="M40,62 Q50,68 60,62" stroke="rgba(200,83,74,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <circle cx="40" cy="52" r="2" fill="rgba(200,83,74,0.35)"/>
+      <circle cx="60" cy="52" r="2" fill="rgba(200,83,74,0.35)"/>
+      <path d="M40,58 Q50,62 60,58" stroke="rgba(200,83,74,0.3)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
     </svg>
   </div>
 </div>
