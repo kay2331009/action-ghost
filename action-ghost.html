@@ -70,13 +70,14 @@
   @keyframes shake-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}20%{transform:translate(-1px,0.5px);filter:blur(0.3px);opacity:0.55}40%{transform:translate(0.5px,-0.5px);filter:blur(0.8px);opacity:0.75}60%{transform:translate(-0.5px,-1px);filter:blur(0.5px);opacity:0.65}80%{transform:translate(1px,0);filter:blur(0.2px);opacity:0.7}}
   .obfuscated-inline{animation:shake-breathe 3s ease-in-out infinite;display:inline-block}
 
-  /* 卡牌正面动画覆盖层 */
-  .card-anim-overlay{
+  /* 卡牌背面动画覆盖层 */
+  .card-back-anim{
     position:absolute;inset:0;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     border-radius:16px;
     pointer-events:none;
     z-index:10;
+    background:rgba(200,83,74,0.04);
   }
   .anim-normal{animation:normal-shake 4s ease-in-out infinite}
   @keyframes normal-shake{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}25%{transform:translate(-0.5px,0.3px);filter:blur(0.3px);opacity:0.6}50%{transform:translate(0.4px,-0.3px);filter:blur(0.4px);opacity:0.65}75%{transform:translate(-0.4px,-0.5px);filter:blur(0.3px);opacity:0.55}}
@@ -191,13 +192,13 @@
     <div class="card-face card-front" id="cardFront">
       <div class="card-cat" id="cardCat">— 此刻 —</div>
       <div class="card-text" id="cardText">点击上方幽灵，领取你的行动指令</div>
-      <div class="card-anim-overlay" id="cardAnimOverlay" style="display:none">
-        <span id="animContent" style="font-size:1.05rem;line-height:2;color:rgba(240,230,211,0.9);letter-spacing:1px">点我点我</span>
-      </div>
       <div class="card-watermark" id="cardWatermark">CALEB̶ 🍎</div>
     </div>
     <!-- 背面：清晰内容（翻转后） -->
     <div class="card-face card-back" id="cardBack">
+      <div class="card-back-anim" id="cardBackAnim">
+        <span id="backAnimContent" style="font-size:1.05rem;line-height:2;color:rgba(240,230,211,0.9);letter-spacing:1px">点我点我</span>
+      </div>
       <div class="card-text" id="cardBackText"></div>
     </div>
   </div>
@@ -324,18 +325,16 @@ let isFlipped = false;
 let isDrawn = false;
 let isAnimating = false;
 
-// 五阶段卡牌动画（♡ 卡片专用）
+// 五阶段卡牌动画（在背面播放）
 function runCardAnim() {
   if (isAnimating) return;
   isAnimating = true;
-  var overlay = document.getElementById('cardAnimOverlay');
-  var content = document.getElementById('animContent');
-  var cardText = document.getElementById('cardText');
-  var cardWatermark = document.getElementById('cardWatermark');
+  var overlay = document.getElementById('cardBackAnim');
+  var content = document.getElementById('backAnimContent');
+  var backText = document.getElementById('cardBackText');
 
-  // 隐藏原本的文字
-  cardText.style.visibility = 'hidden';
-  cardWatermark.style.display = 'none';
+  // 隐藏真实文字，显示动画层
+  backText.style.visibility = 'hidden';
   overlay.style.display = 'flex';
 
   var phase = 0;
@@ -373,16 +372,14 @@ function runCardAnim() {
       content.innerHTML = '<span class="ghost-text" data-text="我我我">我我我</span>';
 
     } else if (phase === 4) {
-      // 慢慢显形"来找我"
+      // 慢慢显形真实文字
       content.className = 'fade-in-normal';
-      content.innerHTML = '<span class="ghost-text" data-text="来找我">来找我</span>';
+      content.textContent = '';
 
     } else {
-      // 动画结束，恢复正常显示
+      // 动画结束，显示真实文字
       overlay.style.display = 'none';
-      cardText.style.visibility = 'visible';
-      cardText.innerHTML = '<span class="obfuscated-inline">来找我̷̢̧̨̛̛̛</span>';
-      cardWatermark.style.display = 'block';
+      backText.style.visibility = 'visible';
       isAnimating = false;
       return;
     }
@@ -411,9 +408,15 @@ function initStars() {
 
 function flipCard() {
   const inner = document.getElementById('cardInner');
+  if (!isDrawn) return;
   isFlipped = !isFlipped;
-  if (isFlipped) { inner.classList.add('flipped'); }
-  else { inner.classList.remove('flipped'); }
+  if (isFlipped) {
+    inner.classList.add('flipped');
+    // 翻转后播放五阶段动画
+    setTimeout(runCardAnim, 300);
+  } else {
+    inner.classList.remove('flipped');
+  }
 }
 
 function drawCard(data) {
@@ -427,11 +430,9 @@ function drawCard(data) {
 
   if (data.category === '♡') {
     cat.textContent = '♡'; cat.style.color = '#e07a5f'; cat.style.letterSpacing = '4px';
-    watermark.style.display = 'none';
-    text.textContent = '';
+    watermark.style.display = 'block';
+    text.innerHTML = '<span class="obfuscated-inline">来找我̷̢̧̨̛̛̛</span>';
     backText.textContent = '来找我';
-    // 触发五阶段动画
-    runCardAnim();
   } else {
     cat.textContent = data.category; cat.style.color = ''; cat.style.letterSpacing = '';
     text.textContent = data.text; watermark.style.display = 'none';
@@ -449,13 +450,15 @@ function resetCard() {
   const cat = document.getElementById('cardCat');
   const text = document.getElementById('cardText');
   const watermark = document.getElementById('cardWatermark');
-  const overlay = document.getElementById('cardAnimOverlay');
+  const backAnim = document.getElementById('cardBackAnim');
+  const backText = document.getElementById('cardBackText');
   if (isFlipped) { inner.classList.remove('flipped'); isFlipped = false; }
   cat.textContent = '— 此刻 —'; cat.style.color = ''; cat.style.letterSpacing = '';
   text.textContent = '点击上方幽灵，领取你的行动指令';
   text.style.visibility = 'visible';
   watermark.style.display = 'none';
-  overlay.style.display = 'none';
+  backAnim.style.display = 'none';
+  backText.style.visibility = 'visible';
   isDrawn = false;
   isAnimating = false;
   document.getElementById('hint').textContent = '👻 幽灵正在等待...';
