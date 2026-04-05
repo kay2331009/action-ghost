@@ -70,6 +70,28 @@
   @keyframes shake-breathe{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}20%{transform:translate(-1px,0.5px);filter:blur(0.3px);opacity:0.55}40%{transform:translate(0.5px,-0.5px);filter:blur(0.8px);opacity:0.75}60%{transform:translate(-0.5px,-1px);filter:blur(0.5px);opacity:0.65}80%{transform:translate(1px,0);filter:blur(0.2px);opacity:0.7}}
   .obfuscated-inline{animation:shake-breathe 3s ease-in-out infinite;display:inline-block}
 
+  /* 卡牌正面动画覆盖层 */
+  .card-anim-overlay{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    border-radius:16px;
+    pointer-events:none;
+    z-index:10;
+  }
+  .anim-normal{animation:normal-shake 4s ease-in-out infinite}
+  @keyframes normal-shake{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.8}25%{transform:translate(-0.5px,0.3px);filter:blur(0.3px);opacity:0.6}50%{transform:translate(0.4px,-0.3px);filter:blur(0.4px);opacity:0.65}75%{transform:translate(-0.4px,-0.5px);filter:blur(0.3px);opacity:0.55}}
+  .type-dots{animation:typing-shake 2s ease-in-out infinite;font-size:1.05rem;line-height:2;letter-spacing:1px}
+  @keyframes typing-shake{0%,100%{transform:translate(0,0);filter:blur(0px);opacity:0.7}25%{transform:translate(-0.5px,0.3px);filter:blur(0.2px);opacity:0.5}50%{transform:translate(0.4px,-0.3px);filter:blur(0.4px);opacity:0.6}75%{transform:translate(-0.4px,-0.5px);filter:blur(0.3px);opacity:0.45}}
+  .ghost-text{position:relative;animation:ghost-duplicate 0.5s ease-in-out infinite;filter:blur(0.8px);display:inline-block}
+  .ghost-text::before,.ghost-text::after{content:attr(data-text);position:absolute;left:0;top:0;animation:ghost-duplicate 0.5s ease-in-out infinite}
+  .ghost-text::before{animation-delay:0.06s;filter:blur(1.2px);opacity:0.6}
+  .ghost-text::after{animation-delay:0.12s;filter:blur(1.6px);opacity:0.4}
+  @keyframes ghost-duplicate{0%{transform:translate(0,0) skewX(0deg);filter:blur(0.8px);opacity:0.8}20%{transform:translate(-3px,2px) skewX(-6deg);filter:blur(1.2px);opacity:0.5}40%{transform:translate(3px,-2px) skewX(4deg);filter:blur(1px);opacity:0.65}60%{transform:translate(-2px,-3px) skewX(-3deg);filter:blur(1.5px);opacity:0.4}80%{transform:translate(2px,1px) skewX(2deg);filter:blur(0.9px);opacity:0.55}}
+  @keyframes fade-in-slow{0%{opacity:0;filter:blur(8px);transform:scale(0.95)}100%{opacity:1;filter:blur(0px);transform:scale(1)}}
+  .fade-in-normal{animation:fade-in-slow 1s ease-out forwards}
+  @keyframes blur-out{0%{opacity:1;filter:blur(0px)}100%{opacity:0;filter:blur(6px)}}
+  .blur-out{animation:blur-out 0.4s ease-in-out forwards}
+
   /* 提示文字 */
   .hint{position:relative;z-index:1;margin-top:18px;font-size:0.58rem;color:rgba(200,83,74,0.3);letter-spacing:3px;animation:pulse 3s ease-in-out infinite;white-space:nowrap}
   @keyframes pulse{0%,100%{opacity:0.25}50%{opacity:0.7}}
@@ -172,6 +194,9 @@
     <div class="card-face card-front" id="cardFront">
       <div class="card-cat" id="cardCat">— 此刻 —</div>
       <div class="card-text" id="cardText">点击上方幽灵，领取你的行动指令</div>
+      <div class="card-anim-overlay" id="cardAnimOverlay" style="display:none">
+        <span id="animContent" style="font-size:1.05rem;line-height:2;color:rgba(240,230,211,0.9);letter-spacing:1px">点我点我</span>
+      </div>
       <div class="card-watermark" id="cardWatermark">CALEB̶ 🍎</div>
     </div>
     <!-- 背面：清晰内容（翻转后） -->
@@ -300,6 +325,77 @@ let count = 0;
 let lastIndex = -1;
 let isFlipped = false;
 let isDrawn = false;
+let isAnimating = false;
+
+// 五阶段卡牌动画（♡ 卡片专用）
+function runCardAnim() {
+  if (isAnimating) return;
+  isAnimating = true;
+  var overlay = document.getElementById('cardAnimOverlay');
+  var content = document.getElementById('animContent');
+  var cardText = document.getElementById('cardText');
+  var cardWatermark = document.getElementById('cardWatermark');
+
+  // 隐藏原本的文字
+  cardText.style.visibility = 'hidden';
+  cardWatermark.style.display = 'none';
+  overlay.style.display = 'flex';
+
+  var phase = 0;
+  // [点我点我5s, 模糊淡出0.4s, 点点点2s, 我我我1.2s, 显形1s]
+  var phaseDuration = [5000, 400, 2000, 1200, 1000];
+
+  function runPhase() {
+    var dur = phaseDuration[phase];
+
+    if (phase === 0) {
+      // 点我点我 - 正常抖动
+      content.className = 'anim-normal';
+      content.textContent = '点我点我';
+
+    } else if (phase === 1) {
+      // 模糊淡出
+      content.className = 'blur-out';
+      content.textContent = '点我点我';
+
+    } else if (phase === 2) {
+      // 点点点打字出现
+      content.className = 'type-dots';
+      content.textContent = '';
+      var dots = ['点', '点点', '点点点', '点点点·', '点点点··', '点点点···'];
+      var i = 0;
+      var typeInterval = setInterval(function() {
+        content.textContent = dots[i] || '点点点···';
+        i++;
+        if (i > dots.length) clearInterval(typeInterval);
+      }, 250);
+
+    } else if (phase === 3) {
+      // 我我我重影
+      content.className = '';
+      content.innerHTML = '<span class="ghost-text" data-text="我我我">我我我</span>';
+
+    } else if (phase === 4) {
+      // 慢慢显形"来找我"
+      content.className = 'fade-in-normal';
+      content.innerHTML = '<span class="ghost-text" data-text="来找我">来找我</span>';
+
+    } else {
+      // 动画结束，恢复正常显示
+      overlay.style.display = 'none';
+      cardText.style.visibility = 'visible';
+      cardText.innerHTML = '<span class="obfuscated-inline">来找我̷̢̧̨̛̛̛</span>';
+      cardWatermark.style.display = 'block';
+      isAnimating = false;
+      return;
+    }
+
+    phase++;
+    setTimeout(runPhase, dur);
+  }
+
+  runPhase();
+}
 
 function initStars() {
   const stars = document.getElementById('stars');
@@ -334,9 +430,11 @@ function drawCard(data) {
 
   if (data.category === '♡') {
     cat.textContent = '♡'; cat.style.color = '#e07a5f'; cat.style.letterSpacing = '4px';
-    text.innerHTML = '<span class="obfuscated-inline">来找我̷̢̧̨̛̛̛</span>';
-    watermark.style.display = 'block';
+    watermark.style.display = 'none';
+    text.textContent = '';
     backText.textContent = '来找我';
+    // 触发五阶段动画
+    runCardAnim();
   } else {
     cat.textContent = data.category; cat.style.color = ''; cat.style.letterSpacing = '';
     text.textContent = data.text; watermark.style.display = 'none';
@@ -354,10 +452,15 @@ function resetCard() {
   const cat = document.getElementById('cardCat');
   const text = document.getElementById('cardText');
   const watermark = document.getElementById('cardWatermark');
+  const overlay = document.getElementById('cardAnimOverlay');
   if (isFlipped) { inner.classList.remove('flipped'); isFlipped = false; }
   cat.textContent = '— 此刻 —'; cat.style.color = ''; cat.style.letterSpacing = '';
-  text.textContent = '点击上方幽灵，领取你的行动指令'; watermark.style.display = 'none';
+  text.textContent = '点击上方幽灵，领取你的行动指令';
+  text.style.visibility = 'visible';
+  watermark.style.display = 'none';
+  overlay.style.display = 'none';
   isDrawn = false;
+  isAnimating = false;
   document.getElementById('hint').textContent = '👻 幽灵正在等待...';
 }
 
